@@ -5,7 +5,7 @@ import { appState } from "./state"
 import { releaseKeySound, keySoundBuffers, sourceDirectoryEnabledBySettings, isTauri, isAndroidTauri, exportButtons, pendingSourcePaths, LAST_SOURCE_WORKSPACE_KEY, isIOSWeb, isAndroidWeb } from "./canvas-interaction"
 import { SkinArchive } from "../skin.ts"
 import { exportFormatFromPath, exportName, isExportFormat, type ExportFormat, type ExportTarget } from "../export.ts"
-import { buildSxiZip } from "../palm/palm-export.ts"
+import { bdaSkinArchive, buildSxiZip } from "../palm/palm-export.ts"
 import { bdaCompatibilityWarnings, type BdaPlatform, convertBdaPlatform } from "../bda-platform.ts"
 import { releaseImagePreviewURL } from "../image-preview.ts"
 import { clearImageSlicePicker } from "./image-pickers"
@@ -337,7 +337,7 @@ export async function exportArchive(format: ExportTarget, targetBdaPlatform?: Ex
     if (appState.archive.format === "bda") {
       if (!appState.bdaBase) throw new Error("无法加载 BDA 官方基础布局")
       updateFileOperationProgress(34, "正在转换 BDA 配置…")
-      const converted = convertBdaArchive(appState.archive, appState.bdaBase)
+      const converted = bdaSkinArchive(appState.archive, appState.bdaBase)
       if (converted.warnings.length && !window.confirm(
         `BDA 转换为手心皮肤时将降级以下内容：\n\n${converted.warnings.join("\n")}\n\n继续导出吗？`,
       )) return
